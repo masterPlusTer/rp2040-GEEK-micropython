@@ -1,4 +1,3 @@
-import pluster
 import sys
 import os
 import random
@@ -11,7 +10,6 @@ import digitalio
 
 
 #brillo del display
-pluster.brillo(3) #valor del 0 al 9
 
 
 
