@@ -1,1 +1,1 @@
-intento de libreria para el rp2040 geek en micropython
+interface novato friendly para el rp2040-GEEK ( en construccion )
