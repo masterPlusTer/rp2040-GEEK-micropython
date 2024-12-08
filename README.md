@@ -1,4 +1,1 @@
-Este codigo funciona en Circuit Python
-
-Funciona con esp32-s3-geek y con la cardputer del M5stack tambien,
-el proyecto esta en desarrollo sepan disculpar el desorden
+intento de libreria para el rp2040 geek en micropython
