@@ -1,8 +1,4 @@
-interface novato friendly para el rp2040-GEEK ( en construccion )
-
-
-# GEEK.py: Librería para Pantallas LCD con RP2040
-
+# GEEK.py: Intento de interfaz novato - friendly para controlar el rp2040 - GEEK
 ## Introducción
 La librería **GEEK.py** está diseñada para facilitar el control de pantallas LCD en dispositivos basados en el microcontrolador RP2040, como la Raspberry Pi Pico. Incluye funciones avanzadas para dibujar figuras, mostrar imágenes BMP y realizar operaciones de bajo nivel con el display.
 
@@ -13,8 +9,9 @@ Esta guía está orientada a usuarios principiantes y proporciona instrucciones 
 ## Requisitos
 
 ### Hardware
-- Microcontrolador RP2040 (Raspberry Pi Pico o similar).
-- Pantalla LCD de 1.14 pulgadas compatible con el controlador ST7789.
+- Microcontrolador - rp2040-GEEK de Waveshare.
+
+
 - Conexiones SPI configuradas según los pines especificados:
   - **BL (Backlight)**: Pin 25
   - **DC (Data/Command)**: Pin 8
@@ -24,7 +21,7 @@ Esta guía está orientada a usuarios principiantes y proporciona instrucciones 
   - **RST (Reset)**: Pin 12
 
 ### Software
-- MicroPython instalado en el RP2040.
+- MicroPython instalado en el RP2040 - GEEK.
 - Librería **GEEK.py**.
 
 ---
@@ -152,7 +149,7 @@ LCD.show()
 
 ## Consejos
 1. Usa colores en formato RGB565 para garantizar la compatibilidad.
-2. Limpia la pantalla antes de dibujar nuevas figuras usando `lcd.fill(color)`.
+2. Limpia la pantalla antes de dibujar nuevas figuras usando `LCD.fill(color)`.
 3. Revisa las conexiones del hardware si experimentas problemas.
 
 ---
