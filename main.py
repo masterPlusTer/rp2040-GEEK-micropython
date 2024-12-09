@@ -5,7 +5,7 @@ import time
 
 LCD = LCD_1inch14()
     #color BRG
-LCD.fill(0b0000000000000000)
+LCD.fill(LCD.red) # que es lo mismo que escribir LCD.fill(0b1111100000000000) o su equivalente en hexadecimal
 LCD.draw_line(10, 10, 10, 100, 0b1111100000000000)  # rojo
 LCD.draw_line(20, 20, 10, 100, 0b0000000000011111)  # azul
 LCD.draw_line(30, 30, 10, 100, 0b0000011111100000)  # verde
@@ -15,7 +15,7 @@ LCD.draw_line(30, 30, 10, 100, 0b0000011111100000)  # verde
 
 
     
-LCD.draw_bmp("RP2040-GEEK.bmp")
+#LCD.draw_bmp("RP2040-GEEK.bmp")
 
 
 
@@ -50,4 +50,7 @@ LCD.draw_oval(120, 67, 50, 30, 0b0000000000011111)  # Óvalo azul
 #LCD.draw_triangle(50, 50, 150, 50, 100, 100, 0x001F, fill=True)  # Azul
 
 LCD.show()
+
+
+
 
