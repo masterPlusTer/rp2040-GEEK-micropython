@@ -12,15 +12,10 @@ LCD.draw_line(30, 30, 10, 100, 0b0000011111100000)  # verde
 #LCD.show()
 #lcd.draw_line(10, 10, 10, 100, 0b1111100000000000)  # rojo
 
-#img = BMPReader('./RP2040-GEEK.bmp')
 
 
     
-#for x in range(240):
- #   LCD.ins(img.get_buf(270,270*x),270,270*x)
-#LCD.mirror()
-#LCD.flip_y()
-#LCD.show()
+LCD.draw_bmp("RP2040-GEEK.bmp")
 
 
 
@@ -42,8 +37,8 @@ LCD.draw_line(30, 30, 10, 100, 0b0000011111100000)  # verde
 #LCD.draw_shape([(60, 60), (120, 50), (180, 60), (150, 100), (90, 100)], 0b000011111100000, fill=True)  # Pentágono verde lleno
 
 #LCD.draw_rectangle(50, 50, 100, 60, 0xF800, fill=True)  # Rectángulo rojo lleno
-LCD.draw_oval(120, 67, 50, 30, 0b0000000000011111, fill=True)  # Óvalo azul lleno
-#LCD.draw_oval(120, 67, 50, 30, 0b0000000000011111)  # Óvalo azul 
+#LCD.draw_oval(120, 67, 50, 30, 0b0000000000011111, fill=True)  # Óvalo azul lleno
+LCD.draw_oval(120, 67, 50, 30, 0b0000000000011111)  # Óvalo azul 
 
 #LCD.draw_trapezoid(50, 50, 150, 50, 120, 100, 80, 100, 0x001F, fill=True)  # Trapecio azul lleno
 #LCD.draw_trapezoid(50, 50, 150, 50, 120, 100, 80, 100, 0x001F)  # Trapecio azul solo borde
@@ -55,7 +50,4 @@ LCD.draw_oval(120, 67, 50, 30, 0b0000000000011111, fill=True)  # Óvalo azul lle
 #LCD.draw_triangle(50, 50, 150, 50, 100, 100, 0x001F, fill=True)  # Azul
 
 LCD.show()
-
-
-
 
