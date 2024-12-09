@@ -118,7 +118,7 @@ Los colores deben especificarse en formato RGB565. Algunos colores predefinidos 
 - **Rojo**: `LCD.red`
 - **Verde**: `LCD.green`
 - **Azul**: `LCD.blue`
-- **Blanco**: `LCD.white`
+- **Negro**: `LCD.black`
 
 ---
 
