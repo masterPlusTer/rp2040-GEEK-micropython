@@ -152,7 +152,9 @@ LCD.show()
 ---
 
 ## Contribuir
-Si tienes sugerencias o encuentras errores, no dudes en abrir un issue en el repositorio de la librería.
+Es probable que encuentres errores debido a que este proyecto se encuentra en construccion. 
+Si tienes sugerencias, no dudes en abrir un issue en el repositorio de la librería.
+
 
 ---
 
