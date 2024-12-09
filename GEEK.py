@@ -37,10 +37,10 @@ class LCD_1inch14(framebuf.FrameBuffer):
         super().__init__(self.buffer, self.width, self.height, framebuf.RGB565)
         self.init_display()
         
-        self.red   =   0x07E0
-        self.green =   0x001f
-        self.blue  =   0xf800
-        self.white =   0xffff
+        self.red   =   0b1111100000000000
+        self.green =   0b0000011111100000
+        self.blue  =   0b0000000000011111
+        self.black =   0x0000000000000000
         
     def write_cmd(self, cmd):
         self.cs(1)
