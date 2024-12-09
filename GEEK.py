@@ -182,8 +182,33 @@ class LCD_1inch14(framebuf.FrameBuffer):
                 buf[temp_top + 1] = buf[temp_bottom + 1]
                 buf[temp_bottom] = t1
                 buf[temp_bottom + 1] = t2
-      
-            
+    
+    def draw_bmp(self, filename):
+        """
+        Dibuja una imagen BMP en el display.
+        Parámetros:
+            filename: Nombre del archivo BMP a mostrar.
+        """
+        try:
+            # Cargar la imagen BMP
+            img = BMPReader(filename)
+
+            # Procesar y mostrar la imagen completa
+            for x in range(self.width):
+                start = x * self.height * 2  # Desplazamiento para cada columna
+                buffer = img.get_buf(self.height * 2, start)
+                self.ins(buffer, len(buffer), start)
+
+            # Invertir verticalmente (si es necesario)
+            self.flip_y()
+
+            # Actualizar la pantalla
+            self.show()
+
+        except Exception as e:
+            print(f"Error al cargar el archivo BMP: {e}")
+          
+                
     def show(self):
         self.write_cmd(0x2A)
         self.write_data(0x00)
@@ -505,5 +530,4 @@ class BMPReader(object):
         self.width = lebytes_to_int(img_bytes[18:22])
         self.height = lebytes_to_int(img_bytes[22:26])        
         
-  
-   
+    
