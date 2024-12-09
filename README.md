@@ -1,4 +1,4 @@
-# GEEK.py: Intento de interfaz novato friendly para controlar el rp2040 - GEEK
+# GEEK.py:  Intento de interfaz novato friendly para controlar el rp2040 - GEEK (en construccion)
 ## Introducción
 La librería **GEEK.py** está diseñada para facilitar el control de pantallas LCD en dispositivos basados en el microcontrolador RP2040, como la Raspberry Pi Pico. Incluye funciones avanzadas para dibujar figuras, mostrar imágenes BMP y realizar operaciones de bajo nivel con el display.
 
