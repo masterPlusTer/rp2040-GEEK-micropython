@@ -30,10 +30,7 @@ Esta guía está orientada a usuarios principiantes y proporciona instrucciones 
 1. **Descargar la librería**:
    Copia el archivo `GEEK.py` en tu dispositivo RP2040 utilizando herramientas como Thonny o cualquier editor compatible con MicroPython.
 
-2. **Conectar la pantalla LCD**:
-   Realiza las conexiones entre tu pantalla LCD y el RP2040 según los pines mencionados en la sección de requisitos.
-
-3. **Probar la configuración inicial**:
+2. **Probar la configuración inicial**:
    Abre el entorno de desarrollo y escribe el siguiente código para verificar que la pantalla esté funcionando:
 
    ```python
