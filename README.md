@@ -62,7 +62,7 @@ import display
 display.init_display()
 
 # Llenar la pantalla con un color (azul en este caso)
-display.fill_screen(0b0000000000000000)  # Color azul (RGB565)
+display.fill_screen(0b0000000000011111)  # Color azul (RGB565)
 ```
 
 ### Configuración de Colores
