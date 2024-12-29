@@ -22,23 +22,15 @@ def show_bmp(file_path, x_offset=0, y_offset=0):
         if bits_per_pixel != 24:
             raise ValueError("Solo se admiten BMP de 24 bits.")
 
-        # Configurar la ventana activa en el display
-        display.set_active_window(x_offset, y_offset, x_offset + width - 1, y_offset + height - 1)
-        display.write_cmd(0x2C)  # Comando para escribir en memoria
+        # Crear un buffer para la imagen completa
+        image_buffer = bytearray(width * height * 2)
 
         # Mover a los datos de píxeles
         bmp_file.seek(pixel_data_offset)
 
-        # Buffer para procesar una línea completa
-        line_buffer = bytearray(width * 3)  # Buffer para la línea en formato RGB888
-        mirrored_line = bytearray(width * 2)  # Buffer para la línea reflejada en RGB565
-
-        # Procesar línea por línea
+        # Procesar toda la imagen
         for y in range(height):
-            # Leer una línea completa en formato RGB888
-            bmp_file.readinto(line_buffer)
-
-            # Convertir y reflejar la línea
+            line_buffer = bytearray(bmp_file.read(width * 3))  # Leer línea RGB888
             for x in range(width):
                 b = line_buffer[3 * x]
                 g = line_buffer[3 * x + 1]
@@ -47,15 +39,11 @@ def show_bmp(file_path, x_offset=0, y_offset=0):
                 # Convertir a RGB565
                 color = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
 
-                # Insertar el color reflejado
+                # Insertar el color reflejado en el buffer
                 mirrored_x = width - x - 1
-                mirrored_line[2 * mirrored_x] = color >> 8
-                mirrored_line[2 * mirrored_x + 1] = color & 0xFF
+                index = 2 * (y * width + mirrored_x)
+                image_buffer[index] = color >> 8  # Byte alto
+                image_buffer[index + 1] = color & 0xFF  # Byte bajo
 
-            # Enviar la línea reflejada al display
-            display.cs.value(0)
-            display.dc.value(1)
-            display.spi.write(mirrored_line)
-            display.cs.value(1)
-
-
+        # Enviar la imagen completa al display
+        display.set_window_and_write(x_offset, y_offset, x_offset + width - 1, y_offset + height - 1, image_buffer)
