@@ -125,7 +125,7 @@ Los archivos que debes incluir en tu proyecto son:
 ## he incluido un ejemplo de interface interfaceUI.py
 
 
-recuerda que la orientacion se configura con display.set_rotation() y acepta parametros del 0 al 4 
+recuerda que la orientacion se configura con display.set_rotation() y acepta parametros del 0 al 3
 
 
 
