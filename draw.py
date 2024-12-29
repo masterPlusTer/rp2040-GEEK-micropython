@@ -29,86 +29,40 @@ def line(x0, y0, x1, y1, color):
     
   
 def rectangle(x0, y0, x1, y1, color, filled=False):
-    """
-    Dibuja un rectángulo entre los puntos (x0, y0) y (x1, y1) con el color especificado.
-    Si 'filled' es True, el rectángulo estará relleno.
-    """
     if filled:
-        # Optimización para rectángulos rellenos usando ventanas y buffers
-        x_start = min(x0, x1)
-        x_end = max(x0, x1)
-        y_start = min(y0, y1)
-        y_end = max(y0, y1)
-        
-        display.set_active_window(x_start, y_start, x_end, y_end)  # Configurar la ventana activa
-        display.write_cmd(0x2C)  # Comando para escribir en memoria
-        
-        # Crear un buffer para una línea completa
+        x_start, x_end = min(x0, x1), max(x0, x1)
+        y_start, y_end = min(y0, y1), max(y0, y1)
+
+        # Crear un buffer para una línea
         line_length = x_end - x_start + 1
         line_buffer = bytearray([color >> 8, color & 0xFF] * line_length)
-        
-        # Enviar líneas al display
-        for _ in range(y_start, y_end + 1):
-            display.cs.value(0)
-            display.dc.value(1)
-            display.spi.write(line_buffer)
-            display.cs.value(1)
+
+        # Enviar todas las líneas usando la función genérica
+        for y in range(y_start, y_end + 1):
+            display.set_window_and_write(x_start, y, x_end, y, line_buffer)
     else:
-        # Contorno del rectángulo (no relleno)
-        # Líneas horizontales superior e inferior
-        for x in range(min(x0, x1), max(x0, x1) + 1):
-            pixel(x, min(y0, y1), color)  # Línea superior
-            pixel(x, max(y0, y1), color)  # Línea inferior
+        # Dibujar contorno usando líneas
+        line(x0, y0, x1, y0, color)  # Línea superior
+        line(x0, y1, x1, y1, color)  # Línea inferior
+        line(x0, y0, x0, y1, color)  # Línea izquierda
+        line(x1, y0, x1, y1, color)  # Línea derecha
         
-        # Líneas verticales izquierda y derecha
-        for y in range(min(y0, y1), max(y0, y1) + 1):
-            pixel(min(x0, x1), y, color)  # Línea izquierda
-            pixel(max(x0, x1), y, color)  # Línea derecha
-
-
+        
 def circle(x0, y0, radius, color, filled=False):
-    """
-    Dibuja un círculo con centro en (x0, y0) y un radio 'radius'.
-    Si 'filled' es True, el círculo estará relleno.
-    """
-    x = radius
-    y = 0
-    err = 0
-
+    x, y, err = radius, 0, 0
     while x >= y:
         if filled:
-            # Dibuja líneas horizontales para rellenar el círculo
-            display.set_active_window(x0 - x, y0 + y, x0 + x, y0 + y)
-            display.write_cmd(0x2C)
-            line_color = bytearray([color >> 8, color & 0xFF] * (2 * x + 1))
-            display.cs.value(0)
-            display.dc.value(1)
-            display.spi.write(line_color)
-            display.cs.value(1)
-
-            display.set_active_window(x0 - x, y0 - y, x0 + x, y0 - y)
-            display.write_cmd(0x2C)
-            display.cs.value(0)
-            display.dc.value(1)
-            display.spi.write(line_color)
-            display.cs.value(1)
-
-            display.set_active_window(x0 - y, y0 + x, x0 + y, y0 + x)
-            display.write_cmd(0x2C)
-            line_color = bytearray([color >> 8, color & 0xFF] * (2 * y + 1))
-            display.cs.value(0)
-            display.dc.value(1)
-            display.spi.write(line_color)
-            display.cs.value(1)
-
-            display.set_active_window(x0 - y, y0 - x, x0 + y, y0 - x)
-            display.write_cmd(0x2C)
-            display.cs.value(0)
-            display.dc.value(1)
-            display.spi.write(line_color)
-            display.cs.value(1)
+            # Dibujar líneas horizontales para rellenar
+            display.set_window_and_write(x0 - x, y0 + y, x0 + x, y0 + y,
+                                 bytearray([color >> 8, color & 0xFF] * (2 * x + 1)))
+            display.set_window_and_write(x0 - x, y0 - y, x0 + x, y0 - y,
+                                 bytearray([color >> 8, color & 0xFF] * (2 * x + 1)))
+            display.set_window_and_write(x0 - y, y0 + x, x0 + y, y0 + x,
+                                 bytearray([color >> 8, color & 0xFF] * (2 * y + 1)))
+            display.set_window_and_write(x0 - y, y0 - x, x0 + y, y0 - x,
+                                 bytearray([color >> 8, color & 0xFF] * (2 * y + 1)))
         else:
-            # Dibuja solo el contorno del círculo
+            # Dibujar puntos del contorno
             pixel(x0 + x, y0 + y, color)
             pixel(x0 - x, y0 + y, color)
             pixel(x0 + x, y0 - y, color)
@@ -123,8 +77,7 @@ def circle(x0, y0, radius, color, filled=False):
         if 2 * (err - x) + 1 > 0:
             x -= 1
             err += 1 - 2 * x
-  
-            
+
 def polygon(color, filled=False, *vertices):
     """
     Dibuja un polígono basado en una lista de vértices.
@@ -136,7 +89,7 @@ def polygon(color, filled=False, *vertices):
         raise ValueError("Un polígono debe tener al menos 3 vértices.")
     
     if filled:
-        # Escaneo horizontal para llenar el polígono
+        # Escaneo horizontal para rellenar el polígono
         min_y = min(y for _, y in vertices)
         max_y = max(y for _, y in vertices)
 
@@ -150,7 +103,7 @@ def polygon(color, filled=False, *vertices):
                     x_end, y_end = x2, y2
                 else:
                     x_start, y_start = x2, y2
-                    x_end, y_end = x1, y1
+                    x_end, y_end = x1, x1
                 
                 if y_start <= y < y_end:
                     x = int(x_start + (y - y_start) * (x_end - x_start) / (y_end - y_start))
@@ -159,17 +112,16 @@ def polygon(color, filled=False, *vertices):
             intersections.sort()
             for i in range(0, len(intersections), 2):
                 if i + 1 < len(intersections):
-                    display.set_active_window(intersections[i], y, intersections[i + 1], y)
-                    display.write_cmd(0x2C)  # Comando para escribir en memoria
-                    line_color = bytearray([color >> 8, color & 0xFF] * (intersections[i + 1] - intersections[i] + 1))
-                    display.cs.value(0)
-                    display.dc.value(1)
-                    display.spi.write(line_color)
-                    display.cs.value(1)
+                    # Usa la función genérica para dibujar líneas horizontales
+                    x_start, x_end = intersections[i], intersections[i + 1]
+                    line_length = x_end - x_start + 1
+                    line_buffer = bytearray([color >> 8, color & 0xFF] * line_length)
+                    display.set_window_and_write(x_start, y, x_end, y, line_buffer)
     else:
-        # Dibuja el contorno del polígono
+        # Dibuja el contorno del polígono utilizando líneas
         for i in range(len(vertices)):
             x1, y1 = vertices[i]
             x2, y2 = vertices[(i + 1) % len(vertices)]
             line(x1, y1, x2, y2, color)
+
 
