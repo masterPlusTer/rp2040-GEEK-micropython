@@ -168,3 +168,19 @@ def fill_screen(color):
         spi.write(line_buffer)
     
     cs(1)
+def set_window_and_write(x_start, y_start, x_end, y_end, data):
+    """
+    Configura la ventana activa en el display y escribe un bloque de datos.
+    :param x_start: Coordenada inicial en X.
+    :param y_start: Coordenada inicial en Y.
+    :param x_end: Coordenada final en X.
+    :param y_end: Coordenada final en Y.
+    :param data: Datos en formato RGB565 a escribir en la ventana activa.
+    """
+    set_active_window(x_start, y_start, x_end, y_end)
+    write_cmd(0x2C)  # Comando para iniciar escritura en memoria
+    cs.value(0)
+    dc.value(1)
+    spi.write(data)
+    cs.value(1)
+
