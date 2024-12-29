@@ -68,9 +68,9 @@ write.text(10, 80, "1234567890 _ ? !", 0b1111100000000000, 0b0000000000000000, s
 write.text(10, 90, "+ - = % # < >", 0b1111100000000000, 0b0000000000000000, size=10)  # Texto rojo sobre fondo negro
 
 
-write.text(10, 100, "abcdefghijklmnopqrstuvwxyz", 0b1111100000000000, 0b0000000000000000, size=12)  # Texto rojo sobre fondo negro
-write.text(10, 110, "ABCDEFGHIJKLMNOPQRSTUVWZYZ", 0b1111100000000000, 0b0000000000000000, size=12)  # Texto rojo sobre fondo negro
-write.text(10, 120, "1234567890 _ ? !", 0b1111100000000000, 0b0000000000000000, size=12)  # Texto rojo sobre fondo negro
+write.text(10, 100, "abcdefghijklmnopqrstuvwxyz", 0b1111100000000000, 0b0000000000011111, size=12)  # Texto rojo sobre fondo azul
+write.text(10, 110, "ABCDEFGHIJKLMNOPQRSTUVWZYZ", 0b1111100000000000, 0b0000011111100000, size=12)  # Texto rojo sobre fondo verde
+write.text(10, 120, "1234567890 _ ? !", 0b1111111111111111, 0b0000000000000000, size=12)  # Texto blanco sobre fondo negro
 write.text(10, 130, "+ - = % # < >", 0b1111100000000000, 0b0000000000000000, size=12)  # Texto rojo sobre fondo negro
 
 
