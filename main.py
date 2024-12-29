@@ -4,7 +4,7 @@ import write
 import image
 # Inicializar el display
 display.init_display()
-display.fill_screen(0b0000000000000000)  # Llenar la pantalla con azul
+display.fill_screen(0b0000000000000000)  # Llenar la pantalla con negro
 
 # Colores en formato RGB565
 red = 0b1111100000000000    # Rojo puro
