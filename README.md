@@ -1,163 +1,126 @@
-# GEEK.py:  Intento de interfaz novato friendly para controlar el rp2040 - GEEK (en construccion)
-## Introducción
-La librería **GEEK.py** está diseñada para facilitar el control de pantallas LCD en dispositivos basados en el microcontrolador RP2040, como la Raspberry Pi Pico. Incluye funciones avanzadas para dibujar figuras, mostrar imágenes BMP y realizar operaciones de bajo nivel con el display.
+intentando incluir todo lo necesario para poder controlar el RP2040-GEEK. 
 
-Esta guía está orientada a usuarios principiantes y proporciona instrucciones claras sobre cómo empezar a usar la librería.
+Hasta ahora estoy trabajando en la parte del display, ya hay una interface novato friendly para empezar a dibujar formas , figuras y escribir texto.
 
----
+He logrado corregir el temita de los colores, por algun motivo el codigo de ejemplo proporcionado por Waveshare venia con el display inicializado en BRG ( si, no es un typo, BRG, primero azul, luego rojo y luego verde) yo no se si esto fue por un error o si habia detras una intencion muy bien orquestada para dominarnos a todos, quizas sea lo segundo pero era muy incomodo trabajar con los colores asi, ademas me parecia un desperdicio de recursos tener que estar convirtiendo a nivel de bits cada vez que habia que hacer algo con los colores, entonces aqui esta, RGB como Dios manda.
 
-## Requisitos
+TO DO LIST:
+integrar un modulo para trabajar con la tarjeta SD aunque no prometo nada porque ya he estado intentandolo por todos los medios y no hay con que darle...
 
-### Hardware
-- Microcontrolador - rp2040-GEEK de Waveshare.
+este dispositivo es muy vistoso pero programarlo es una pesadilla, y lo que funciona en micropython no funciona en circuitpython y se hace imposible integrar en un unico programa todo lo que el RP2040-GEEK tiene para ofrecer.
+
+por ahora esto es lo que hay. 
+me voy a poner a adaptar esto mismo para circuit python ya que alli quizas si sea posible mostrar en el display datos de la sd ... en fin...
+en principio con descargar todo este paquete y subirlo a la raiz del RP2040-GEEK en cirguitpython deberia funcionar.
+
+En el main.py hay varios ejemplos de funciones posibles , descomenta y comenta lineas y mira lo que pasa, ademas hay un intento de documentacion mas abajo.... 
+esto esta en construccion, sepan disculpar el desorden...
+
+################################################################################################################################################################
 
 
-- Conexiones SPI configuradas según los pines especificados:
-  - **BL (Backlight)**: Pin 25
-  - **DC (Data/Command)**: Pin 8
-  - **CS (Chip Select)**: Pin 9
-  - **SCK (Serial Clock)**: Pin 10
-  - **MOSI (Master Out, Slave In)**: Pin 11
-  - **RST (Reset)**: Pin 12
+# Librería para el Control de Pantalla en RP2040-GEEK
 
-### Software
-- MicroPython instalado en el RP2040 - GEEK.
-- Librería **GEEK.py**.
+Esta librería ha sido desarrollada para controlar la pantalla, dibujar gráficos y escribir texto en el dispositivo RP2040-GEEK utilizando el lenguaje de programación MicroPython. A continuación, se explica el uso de cada módulo y sus funciones.
 
----
+## Módulos Importados
+La librería se divide en varios módulos principales:
 
-## Instalación
-1. **Descargar la librería**:
-   Copia el archivo `GEEK.py` en tu dispositivo RP2040 utilizando herramientas como Thonny o cualquier editor compatible con MicroPython.
+### 1. `display`
+Este módulo maneja la inicialización y configuración de la pantalla del RP2040-GEEK.
 
-2. **Probar la configuración inicial**:
-   Abre el entorno de desarrollo y escribe el siguiente código para verificar que la pantalla esté funcionando:
+- **`init_display()`**: Inicializa el display. Debe llamarse antes de cualquier otra operación en la pantalla.
+- **`fill_screen(color)`**: Llena toda la pantalla con un color dado. El color debe proporcionarse en formato RGB565.
+- **`set_rotation(rotation)`**: Configura la rotación de la pantalla. Los valores posibles son 0 (normal), 1 (90 grados), 2 (180 grados) y 3 (270 grados).
 
-   ```python
-   from GEEK import LCD_1inch14
-   
-   LCD = LCD_1inch14()
-   LCD.draw_pixel(10, 10, lcd.red)  # Dibuja un pixel rojo en (10, 10)
-   LCD.show()
-   ```
+### 2. `draw`
+Este módulo proporciona funciones para dibujar en la pantalla, como píxeles, líneas, círculos y polígonos.
 
----
+- **`draw_pixel(x, y, color)`**: Dibuja un píxel en las coordenadas `(x, y)` con el color especificado en formato RGB565.
+- **`draw_line(x0, y0, x1, y1, color)`**: Dibuja una línea entre los puntos `(x0, y0)` y `(x1, y1)` con el color especificado en formato RGB565.
+- **`draw_rectangle(x0, y0, x1, y1, color, filled=False)`**: Dibuja un rectángulo. Si `filled=True`, el rectángulo se rellena con el color dado.
+- **`draw_circle(x, y, radius, color, filled=False)`**: Dibuja un círculo. Si `filled=True`, el círculo se rellena con el color dado.
+- **`draw_polygon(color, filled=False, *vertices)`**: Dibuja un polígono usando una lista de vértices. Si `filled=True`, el polígono se rellena.
 
-## Uso de la Librería
+### 3. `write`
+Este módulo proporciona funciones para escribir texto en la pantalla.
 
+- **`text(x, y, text, color, bg_color, size=8)`**: Dibuja un texto en la posición `(x, y)` usando la fuente especificada. El tamaño de la fuente puede ajustarse a 8x8, 10x10 o 12x12, con un valor predeterminado de 8x8.
+
+### 4. `image`
+Este módulo permite mostrar imágenes BMP en la pantalla.
+
+- **`show_bmp(file_path, x_offset=0, y_offset=0)`**: Muestra un archivo BMP en la pantalla. El archivo BMP debe estar en formato de 24 bits (RGB888). Los valores `x_offset` y `y_offset` permiten ajustar la posición de la imagen en la pantalla.
+
+## Uso Básico
 ### Inicialización de la Pantalla
-
-Para inicializar la pantalla, crea una instancia de la clase `LCD_1inch14`:
-
+Antes de comenzar a dibujar, debemos inicializar la pantalla y configurarla:
 ```python
-from GEEK import LCD_1inch14
+import display
 
-LCD = LCD_1inch14()
+# Inicializar el display
+display.init_display()
+
+# Llenar la pantalla con un color (azul en este caso)
+display.fill_screen(0b0000000000000000)  # Color azul (RGB565)
 ```
 
-### Dibujar Figuras
-
-La librería proporciona múltiples funciones para dibujar:
-
-#### Píxel
+### Configuración de Colores
+Los colores deben ser especificados en formato RGB565 (5 bits para el rojo, 6 bits para el verde y 5 bits para el azul). Ejemplo:
 ```python
-LCD.draw_pixel(x, y, color)
-```
-Dibuja un píxel en la posición `(x, y)` con el color especificado.
-
-#### Línea
-```python
-LCD.draw_line(x1, y1, x2, y2, color)
-```
-Dibuja una línea entre los puntos `(x1, y1)` y `(x2, y2)`.
-
-#### Círculo
-```python
-LCD.draw_circle(x0, y0, radius, color, fill=False)
-```
-Dibuja un círculo con centro en `(x0, y0)` y radio `radius`. Usa `fill=True` para rellenarlo.
-
-#### Cuadrado
-```python
-LCD.draw_square(x0, y0, side, color, fill=False)
-```
-Dibuja un cuadrado con esquina superior izquierda en `(x0, y0)` y lado de longitud `side`.
-
-#### Rectángulo
-```python
-LCD.draw_rectangle(x0, y0, width, height, color, fill=False)
-```
-Dibuja un rectángulo con esquina superior izquierda en `(x0, y0)` y dimensiones `width` x `height`.
-
-#### Triángulo
-```python
-LCD.draw_triangle(x1, y1, x2, y2, x3, y3, color, fill=False)
-```
-Dibuja un triángulo conectando los puntos `(x1, y1)`, `(x2, y2)` y `(x3, y3)`.
-
-#### Forma Genérica
-```python
-LCD.draw_shape(points, color, fill=False)
-```
-Dibuja una figura definida por la lista de puntos `points`.
-
-### Mostrar Imágenes BMP
-
-La librería permite cargar y mostrar imágenes BMP.
-
-```python
-.drLCDaw_bmp('imagen.bmp')
-```
-Asegúrate de que el archivo BMP esté en la memoria del dispositivo y sea de 24 bits.
-
----
-
-## Colores
-Los colores deben especificarse en formato RGB565. Algunos colores predefinidos son:
-
-- **Rojo**: `LCD.red`
-- **Verde**: `LCD.green`
-- **Azul**: `LCD.blue`
-- **Negro**: `LCD.black`
-
----
-
-## Ejemplo Completo
-El siguiente ejemplo dibuja varias formas y muestra un mensaje:
-
-```python
-from GEEK import LCD_1inch14
-
-LCD = LCD_1inch14()
-LCD.fill(lcd.white)  # Limpia la pantalla con color blanco
-
-# Dibujar formas
-LCD.draw_circle(60, 60, 30, lcd.blue, fill=True)
-LCD.draw_rectangle(100, 50, 50, 30, lcd.green, fill=True)
-LCD.draw_triangle(150, 70, 170, 120, 130, 120, lcd.red)
-
-# Mostrar texto (requiere función adicional para texto)
-# LCD.draw_text(10, 10, "Hola Mundo", lcd.black)
-
-LCD.show()
+red = 0b1111100000000000    # Rojo puro
+green = 0b0000011111100000  # Verde puro
+blue = 0b0000000000011111   # Azul puro
+yellow = 0b1111111111100000 # Amarillo
+black = 0b0000000000000000  # Negro
+white = 0b1111111111111111  # Blanco
 ```
 
----
+### Dibujar en la Pantalla
+Usamos el módulo `draw` para dibujar formas como píxeles, líneas, rectángulos, círculos y polígonos:
+```python
+import draw
 
-## Consejos
-1. Usa colores en formato RGB565 para garantizar la compatibilidad.
-2. Limpia la pantalla antes de dibujar nuevas figuras usando `LCD.fill(color)`.
-3. Revisa las conexiones del hardware si experimentas problemas.
+# Dibujar píxeles en la pantalla
+draw.draw_pixel(134, 0, red)  # Esquina superior derecha
+draw.draw_pixel(120, 150, blue)  # Un punto en el medio
+```
 
----
+### Escribir Texto
+El módulo `write` se utiliza para escribir texto en la pantalla:
+```python
+import write
 
-## Contribuir
-Es probable que encuentres errores debido a que este proyecto se encuentra en construccion. 
-Si tienes sugerencias, no dudes en abrir un issue en el repositorio de la librería.
+# Escribir texto en la pantalla
+write.text(10, 20, 'Hola Mundo!', white, black)
+```
 
+### Mostrar una Imagen BMP
+Para mostrar una imagen BMP en la pantalla, usamos el módulo `image`:
+```python
+import image
 
----
+# Mostrar una imagen BMP desde un archivo
+image.show_bmp('/RP2040-GEEK.bmp', x_offset=0, y_offset=0)
+```
 
-## Licencia
-Esta librería está bajo la licencia MIT. Puedes usarla y modificarla libremente siempre y cuando incluyas la licencia original.
+## Fuentes de Texto
+La librería incluye tres tamaños de fuente (8x8, 10x10 y 12x12). El tamaño de la fuente puede especificarse en la función `write.text` utilizando el parámetro `size`. El valor predeterminado es 8x8, pero puede configurarse como 10x10 o 12x12 para un texto más grande:
+```python
+write.text(10, 60, 'Texto 10x10', white, black, size=10)
+write.text(10, 100, 'Texto 12x12', white, black, size=12)
+```
+
+## Conclusión
+Esta librería permite controlar la pantalla del RP2040-GEEK de manera sencilla, ofreciendo herramientas para dibujar gráficos y mostrar texto con diferentes fuentes y tamaños. Es útil para proyectos interactivos donde se necesita una interfaz visual con gráficos y texto.
+
+## Archivos del Proyecto
+Los archivos que debes incluir en tu proyecto son:
+- `display.py`: Controla la pantalla y sus configuraciones.
+- `draw.py`: Funciones para dibujar en la pantalla.
+- `write.py`: Funciones para escribir texto en la pantalla.
+- `image.py`: Función para mostrar imágenes BMP en la pantalla.
+
+¡Disfruta programando tu RP2040-GEEK!
+
 
