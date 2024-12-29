@@ -45,23 +45,3 @@ def text(x, y, text, color, bg_color, size=8):
 
 
 
-font_12x12 = {
-    'A': [
-        0b000000110000,
-        0b000001001000,
-        0b000010000100,
-        0b000010000100,
-        0b011111111110,
-        0b000010000100,
-        0b000010000100,
-        0b000010000100,
-        0b000000000000,
-        0b000000000000,
-        0b000000000000,
-        0b000000000000,
-    ],
-    # Define más caracteres para 12x12...
-}
-    # Agrega otros caracteres especiales como '?', '!', '0'-'9', y letras minúsculas
-
-
