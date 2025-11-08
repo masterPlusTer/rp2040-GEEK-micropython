@@ -7,7 +7,7 @@ def pixel(x, y, color):
     display.write_data(color >> 8)  # Byte alto del color
     display.write_data(color & 0xFF)  # Byte bajo del color
     
-def line(x0, y0, x1, y1, color):
+def line(x1, y1, x0, y0, color):
     """Dibuja una línea entre los puntos (x0, y0) y (x1, y1) con el color especificado."""
     dx = abs(x1 - x0)
     dy = abs(y1 - y0)
@@ -123,5 +123,6 @@ def polygon(color, filled=False, *vertices):
             x1, y1 = vertices[i]
             x2, y2 = vertices[(i + 1) % len(vertices)]
             line(x1, y1, x2, y2, color)
+
 
 
