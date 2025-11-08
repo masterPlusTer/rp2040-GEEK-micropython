@@ -3,6 +3,7 @@ import draw
 import font_small
 import font_medium
 import font_large
+import font_xlarge
 
 def draw_char(x, y, char, color, bg_color, size=8):
     """
@@ -23,8 +24,11 @@ def draw_char(x, y, char, color, bg_color, size=8):
     elif size == 12:
         font = font_large.font_12x12
         width, height = 12, 12
+    elif size == 20:
+        font = font_xlarge.font_20x20
+        width, height = 20, 20
     else:
-        raise ValueError("Tamaño de fuente no soportado. Usa 8, 10 o 12.")
+        raise ValueError("Tamaño de fuente no soportado. Usa 8, 10 o 12 o 20.")
 
     if char not in font:
         return  # Salta si el carácter no está en la fuente
@@ -59,7 +63,7 @@ def text(x, y, text, color, bg_color, size=8):
     :param text: Texto a dibujar.
     :param color: Color del texto en formato RGB565.
     :param bg_color: Color de fondo en formato RGB565.
-    :param size: Tamaño de la fuente (8, 10, 12).
+    :param size: Tamaño de la fuente (8, 10, 12, 20).
     """
     if size == 8:
         spacing = 8
@@ -67,11 +71,14 @@ def text(x, y, text, color, bg_color, size=8):
         spacing = 10
     elif size == 12:
         spacing = 12
+    elif size == 20:
+        spacing = 20
     else:
-        raise ValueError("Tamaño de fuente no soportado. Usa 8, 10 o 12.")
+        raise ValueError("Tamaño de fuente no soportado. Usa 8, 10 , 12 o 20.")
 
     for i, char in enumerate(text):
         draw_char(x + i * spacing, y, char, color, bg_color, size)
+
 
 
 
