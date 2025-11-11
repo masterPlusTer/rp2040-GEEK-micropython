@@ -36,13 +36,13 @@ except Exception as e:
     print("SD ERROR:", e)
 
 # ---- Decoración: líneas/figuras de tu demo ----
-draw.line(134, 239, 10, 10, GREEN)  # línea verde
-draw.rectangle(10, 10, 50, 30, color=GREEN)                     # rect sin relleno
-draw.rectangle(60, 10, 100, 30, color=BLUE, filled=True)        # rect relleno
-draw.circle(95, 95, radius=30, color=RED)                       # círculo sin relleno
-draw.circle(50, 50, radius=30, color=YELLOW, filled=True)       # círculo relleno
-draw.polygon(GREEN, False, (10, 10), (20, 50), (80, 60), (50, 10), (9, 10))
-draw.polygon(RED,   True,  (60, 60), (120, 50), (180, 60), (150, 100), (90, 100))
+#draw.line(134, 239, 10, 10, GREEN)  # línea verde
+#draw.rectangle(10, 10, 50, 30, color=GREEN)                     # rect sin relleno
+draw.rectangle(180, 10, 220, 30, color=BLUE, filled=True)        # rect relleno
+#draw.circle(95, 95, radius=30, color=RED)                       # círculo sin relleno
+draw.circle(210, 120, radius=10, color=YELLOW, filled=True)       # círculo relleno
+#draw.polygon(GREEN, False, (10, 10), (20, 50), (80, 60), (50, 10), (9, 10))
+#draw.polygon(RED,   True,  (60, 60), (120, 50), (180, 60), (150, 100), (90, 100))
 
 # ---- Texto: datos de la SD (sustituye lo “aleatorio”) ----
 x0 = 10
@@ -86,6 +86,7 @@ else:
 #image.show_bmp("/sd/RP2040-GEEK.bmp", x_offset=0, y_offset=0)
 
 # Imagen en la raiz del rp2040
-image.show_bmp("RP2040-GEEK.bmp", x_offset=0, y_offset=0)
+#image.show_bmp("RP2040-GEEK.bmp", x_offset=0, y_offset=0)
+
 
 
