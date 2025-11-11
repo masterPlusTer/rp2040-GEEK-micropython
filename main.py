@@ -1,81 +1,91 @@
 import display
 import draw
 import write
-import image
-# Inicializar el display
+import image  # si no lo usas, no molesta
+from sd_helpers import mount_sd, get_sd_info
+
+# ---- Inicializar display ----
 display.init_display()
-display.fill_screen(0b0000000000000000)  # Llenar la pantalla 
+display.fill_screen(0b0000000000000000)  # Negro
 
-# Colores en formato RGB565
-red = 0b1111100000000000    # Rojo puro
-green = 0b0000011111100000  # Verde puro
-blue = 0b0000000000011111   # Azul puro
-yellow = 0b1111111111100000 # Amarillo
-black = 0b0000000000000000  # Negro
-white = 0b1111111111111111  # Blanco
+# Colores RGB565
+RED     = 0b1111100000000000
+GREEN   = 0b0000011111100000
+BLUE    = 0b0000000000011111
+YELLOW  = 0b1111111111100000
+BLACK   = 0b0000000000000000
+WHITE   = 0b1111111111111111
+CYAN    = 0b0000011111111111
+ORANGE  = 0b1111110000000000
 
+display.set_rotation(1)  # Apaisado
 
-display.set_rotation(3)  # Apaisado (90 grados)
+# ---- Montar SD y obtener info ----
+sd = None
+mount_point = "/sd"
+sd_ok = False
+sd_info = None
+try:
+    sd, mount_point = mount_sd()  # usa SPI0: 18/19/20/21
+    sd_ok = True
+    sd_info = get_sd_info(mount_point, sd_obj=sd)
+except Exception as e:
+    sd_ok = False
+    sd_info = None
+    # Si quieres, muestra error en consola:
+    print("SD ERROR:", e)
 
+# ---- Decoración: líneas/figuras de tu demo ----
+draw.line(134, 239, 10, 10, GREEN)  # línea verde
+draw.rectangle(10, 10, 50, 30, color=GREEN)                     # rect sin relleno
+draw.rectangle(60, 10, 100, 30, color=BLUE, filled=True)        # rect relleno
+draw.circle(95, 95, radius=30, color=RED)                       # círculo sin relleno
+draw.circle(50, 50, radius=30, color=YELLOW, filled=True)       # círculo relleno
+draw.polygon(GREEN, False, (10, 10), (20, 50), (80, 60), (50, 10), (9, 10))
+draw.polygon(RED,   True,  (60, 60), (120, 50), (180, 60), (150, 100), (90, 100))
 
+# ---- Texto: datos de la SD (sustituye lo “aleatorio”) ----
+x0 = 10
+y0 = 20
+bg = BLACK
 
-# Dibujar píxeles en diferentes posiciones y colores
-#draw_pixel(0, 0, red)       # Esquina superior izquierda
-#draw.pixel(134, 0, red)       # Esquina superior derecha
+if sd_ok and sd_info:
+    write.text(x0, y0,      "SD Card Info",           WHITE, bg, size=12)
+    y0 += 12
 
-#draw.pixel(120, 150, blue)
+    cap = sd_info["capacidad_total_mb"]
+    libre = sd_info["espacio_libre_mb"]
+    usado = sd_info["espacio_usado_mb"]
 
-#draw.pixel(0, 239, blue) # Esquina inferior izquierda
+    write.text(x0, y0,      "Estado: OK",             GREEN, bg, size=12);   y0 += 12
+    write.text(x0, y0,      "Capacidad: %.2f MiB" % cap,    CYAN,  bg, size=12); y0 += 12
+    write.text(x0, y0,      "Libre:     %.2f MiB" % libre,  CYAN,  bg, size=12); y0 += 12
+    write.text(x0, y0,      "Usado:     %.2f MiB" % usado,  CYAN,  bg, size=12); y0 += 16
 
-#draw.pixel(134, 239, green) # Esquina inferior derecha
+    write.text(x0, y0,      "Archivos en /sd:",       ORANGE, bg, size=12);  y0 += 12
 
-draw.line(134, 239,10, 10, green) # linea verde
-#draw.line(134, 239,50, 50, red) # linea roja
-#draw.line(134, 239,100,100, blue) # linea azul
+    # Lista 10 items máx para no llenar la pantalla
+    max_items = 10
+    for name in sd_info["archivos"][:max_items]:
+        # recorta si tu write.text no hace clipping
+        shown = name[:28]
+        write.text(x0 + 6, y0, "- " + shown, WHITE, bg, size=12)
+        y0 += 12
 
+    # Si hay más, indica paginación
+    if len(sd_info["archivos"]) > max_items:
+        write.text(x0 + 6, y0, "... (mas archivos)", YELLOW, bg, size=12)
+        y0 += 12
 
-# Dibuja un rectángulo sin relleno
-draw.rectangle(10, 10, 50, 30, color=0b0000011111100000)  # Color verde
+else:
+    write.text(x0, y0, "SD Card Info", WHITE, bg, size=12); y0 += 12
+    write.text(x0, y0, "Estado: ERROR", RED, bg, size=12);  y0 += 12
+    write.text(x0, y0, "Ver consola y FAT32", WHITE, bg, size=12)
 
-# Dibuja un rectángulo con relleno
-draw.rectangle(60, 10, 100, 30, color=0b0000000000011111, filled=True)  # Color azul
+# Imagen en la SD
+#image.show_bmp("/sd/RP2040-GEEK.bmp", x_offset=0, y_offset=0)
 
- #Dibuja un círculo sin relleno
-draw.circle(95, 95, radius=30, color=0b1111100000000000)  # Color rojo
-
-# Dibuja un círculo relleno
-draw.circle(50, 50, radius=30, color=0xFFFF00, filled=True)  # Color amarillo
-
-
-# Dibuja un polígono sin relleno
-draw.polygon(0b0000011111100000, False, (10, 10), (20, 50), (80, 60), (50, 10), (9, 10))
-
-# Dibuja un polígono relleno
-draw.polygon(0b1111100000000000, True, (60, 60), (120, 50), (180, 60), (150, 100), (90, 100))
-
-
-
-# Escribir texto en el display
-write.text(10, 20, "abcdefghijklmnopqrstuvwxyz", 0b1111100000000000, 0b0000000000000000)  # Texto rojo sobre fondo negro
-write.text(10, 30, "ABCDEFGHIJKLMNOPQRSTUVWZYZ", 0b1111100000000000, 0b0000000000000000)  # Texto rojo sobre fondo negro
-write.text(10, 40, "1234567890 _ ? !", 0b1111100000000000, 0b0000000000000000)  # Texto rojo sobre fondo negro
-write.text(10, 50, "+ - = % # < >", 0b1111100000000000, 0b0000000000000000)  # Texto rojo sobre fondo negro
-
-
-write.text(10, 60, "abcdefghijklmnopqrstuvwxyz", 0b1111100000000000, 0b0000000000000000, size=10)  # Texto rojo sobre fondo negro
-write.text(10, 70, "ABCDEFGHIJKLMNOPQRSTUVWZYZ", 0b1111100000000000, 0b0000000000000000, size=10)  # Texto rojo sobre fondo negro
-write.text(10, 80, "1234567890 _ ? !", 0b1111100000000000, 0b0000000000000000, size=10)  # Texto rojo sobre fondo negro
-write.text(10, 90, "+ - = % # < >", 0b1111100000000000, 0b0000000000000000, size=10)  # Texto rojo sobre fondo negro
-
-
-write.text(10, 100, "abcdefghijklmnopqrstuvwxyz", 0b1111100000000000, 0b0000000000011111, size=12)  # Texto rojo sobre fondo azul
-write.text(10, 110, "ABCDEFGHIJKLMNOPQRSTUVWZYZ", 0b1111100000000000, 0b0000011111100000, size=12)  # Texto rojo sobre fondo verde
-write.text(10, 120, "1234567890 _ ? !", 0b1111111111111111, 0b0000000000000000, size=12)  # Texto blanco sobre fondo negro
-write.text(10, 130, "+ - = % # < >", 0b1111100000000000, 0b0000000000000000, size=12)  # Texto rojo sobre fondo negro
-
-
-#image.show_bmp("/RP2040-GEEK.bmp", x_offset=0, y_offset=0)
-
-
+# Imagen en la raiz del rp2040
+image.show_bmp("RP2040-GEEK.bmp", x_offset=0, y_offset=0)
 
 
