@@ -1,0 +1,58 @@
+import os
+from machine import Pin, SPI
+import sdcard
+
+# Configura los pines SPI (ajusta si tu placa usa otros)
+SCK  = 18
+MOSI = 19
+MISO = 20
+CS   = 21
+
+# Montar la SD
+def mount_sd():
+    spi = SPI(0, baudrate=10_000_000, polarity=0, phase=0,
+              sck=Pin(SCK), mosi=Pin(MOSI), miso=Pin(MISO))
+    cs = Pin(CS, Pin.OUT)
+    sd = sdcard.SDCard(spi, cs)
+    vfs = os.VfsFat(sd)
+    try:
+        os.mount(vfs, "/sd")
+    except OSError:
+        try:
+            os.umount("/sd")
+        except Exception:
+            pass
+        os.mount(vfs, "/sd")
+    return "/sd"
+
+# Buscar siguiente nombre disponible
+def siguiente_nombre_incremental(base="archivo", ext="txt", carpeta="/sd"):
+    try:
+        existentes = os.listdir(carpeta)
+    except Exception:
+        existentes = []
+    prefijo = f"{base}_"
+    sufijo = f".{ext}"
+    max_n = 0
+    for nombre in existentes:
+        if nombre.startswith(prefijo) and nombre.endswith(sufijo):
+            try:
+                n = int(nombre[len(prefijo):-len(sufijo)])
+                if n > max_n:
+                    max_n = n
+            except ValueError:
+                pass
+    siguiente = max_n + 1
+    return f"{base}_{siguiente}.{ext}"
+
+# Crear archivo nuevo
+def crear_archivo_incremental():
+    carpeta = mount_sd()
+    nombre = siguiente_nombre_incremental(base="archivo", ext="txt", carpeta=carpeta)
+    ruta = f"{carpeta}/{nombre}"
+    with open(ruta, "w") as f:
+        f.write(f"Hola! Este es {nombre}\n")
+    print(f"Archivo creado: {ruta}")
+
+# Ejecutar al cargar
+crear_archivo_incremental()
