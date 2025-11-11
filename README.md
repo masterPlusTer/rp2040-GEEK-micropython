@@ -1,16 +1,9 @@
-intentando incluir todo lo necesario para poder controlar el RP2040-GEEK. 
+Interface novato friendly para el RP2040-GEEK (micropython). 
 
-Hasta ahora estoy trabajando en la parte del display, ya hay una interface novato friendly para empezar a dibujar formas , figuras y escribir texto.
+el codigo va mejorando con ayuda de chatgp, Y AHORA YA SE PUEDE USAR LA SD AL MISMO TIEMPO QUE TODAS LAS DEMAS FUNCIONES!!!  y mostrar la data de la misma en el display, ademas se pueden dibujar figuras y escribir texto.
 
 He logrado corregir el temita de los colores, por algun motivo el codigo de ejemplo proporcionado por Waveshare venia con el display inicializado en BRG ( si, no es un typo, BRG, primero azul, luego rojo y luego verde) yo no se si esto fue por un error o si habia detras una intencion muy bien orquestada para dominarnos a todos, quizas sea lo segundo pero era muy incomodo trabajar con los colores asi, ademas me parecia un desperdicio de recursos tener que estar convirtiendo a nivel de bits cada vez que habia que hacer algo con los colores, entonces aqui esta, RGB como Dios manda.
 
-TO DO LIST:
-integrar un modulo para trabajar con la tarjeta SD aunque no prometo nada porque ya he estado intentandolo por todos los medios y no hay con que darle...
-
-este dispositivo es muy vistoso pero programarlo es una pesadilla, y lo que funciona en micropython no funciona en circuitpython y se hace imposible integrar en un unico programa todo lo que el RP2040-GEEK tiene para ofrecer.
-
-por ahora esto es lo que hay. 
-me voy a poner a adaptar esto mismo para circuit python ya que alli quizas si sea posible mostrar en el display datos de la sd ... en fin...
 en principio con descargar todo este paquete y subirlo a la raiz del RP2040-GEEK en micropython deberia funcionar.
 
 En el main.py hay varios ejemplos de funciones posibles , descomenta y comenta lineas y mira lo que pasa, ademas hay un intento de documentacion mas abajo.... 
