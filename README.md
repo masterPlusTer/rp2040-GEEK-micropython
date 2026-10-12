@@ -5,6 +5,9 @@
 A beginner-friendly MicroPython project for the **Waveshare RP2040-GEEK** and **RP2350-GEEK**.
 
 This project started as a collection of experiments with an LCD display, some graphics functions and a microSD card. Eventually, it became a small, self-contained application that runs on both devices.
+<img width="1080" height="1440" alt="rp2040-rp2350-geek" src="https://github.com/user-attachments/assets/16c03392-908e-4cfe-8ae9-754a44c32ea6" />
+<img width="1080" height="1440" alt="geek-startup-bmp" src="https://github.com/user-attachments/assets/f47ad1fc-b20a-46b7-b09b-e46dfd28010b" />
+<img width="1080" height="1440" alt="geek-sd-browser" src="https://github.com/user-attachments/assets/2b86e3d5-bcb5-49e7-8de9-06dcc9723522" />
 
 The idea is simple: **give beginners a working starting point instead of making them figure out every hardware detail from scratch.**
 
